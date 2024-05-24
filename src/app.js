@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
   res.send("Bienvenido a la API RESTFull de la libreria");
 });
 
+
 const authRoutes = require("./routes/auth.routes");
 
 //RUTAS PARA LA AUTENTICACION
