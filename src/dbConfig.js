@@ -1,21 +1,15 @@
-const mysql= require('mysql')
+const mongoose = require('mongoose');
 
-const connection= mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'Papeleria'
-}
-)
+//cadena de conexion
+const URI = process.env.MONGODB_URI
+            ? process.env.MONGODB_URI
+            : 'mongodb://127.0.0.1/PapelNet';
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error de conexión a la base de datos: ' + err.stack);
-        return;
-    }
-    console.log('Conexión a la base de datos exitosa');
-  });
-  
 
-  
-  module.exports = connection
+mongoose.connect(URI);
+
+const conexion = mongoose.connection;
+
+conexion.once('open',()=>{
+    console.log('conexion exitosa', URI)
+});
