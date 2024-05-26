@@ -8,7 +8,6 @@ const URI = process.env.MONGODB_URI
 
 mongoose.connect(URI);
 
-
 const conexion = mongoose.connection;
 
 conexion.once('open',()=>{

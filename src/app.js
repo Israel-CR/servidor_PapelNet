@@ -17,13 +17,15 @@ app.get("/", (req, res) => {
 });
 
 
-const authRoutes = require("./routes/auth.routes");
+const userRoutes = require('./routes/user.routes');
 const productRoutes = require('./routes/product.routes');
 
-//RUTAS PARA LA AUTENTICACION
-app.use("", authRoutes);
 
-app.use("", productRoutes);
+//RUTAS 
+app.use("/users", userRoutes);
+app.use("/products", productRoutes);
+
+
 
 app.set("port", process.env.PORT || 5000);
 
