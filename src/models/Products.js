@@ -33,6 +33,8 @@ const productSchema = new Schema({
   proveedor: {
     type: String,
   },
-});
+},{
+    timestamps:true
+    });
 
 module.exports = model("Products", productSchema);
