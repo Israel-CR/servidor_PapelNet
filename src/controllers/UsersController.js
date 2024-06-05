@@ -62,20 +62,21 @@ userController.getAllUsers = async (req, res) => {
     try {
      const users = await Users.find({rol:"VENDEDOR"},'usuario rol telefono nombre');
 
-     res.json(users);
+     res.status(200).json(users);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   };
+  
 
   userController.getUserById = async (req, res) => {
-    const id=req.params.id
+    const id=req.user.id
     try {
       const usuario = await Users.findById(id);
       if (!usuario) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
-      res.status(200).json(usuario);
+      res.status(200).json({id:usuario._id,nombre:usuario.nombre,telefono:usuario.telefono, rol:usuario.rol});
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -103,7 +104,7 @@ userController.getAllUsers = async (req, res) => {
       if (!userDeleted) {
         return res.status(404).json({ error: "usuario no encontrado" });
       }
-      return res.status(200).json({ userDeleted });
+      return res.status(204).json({ userDeleted });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

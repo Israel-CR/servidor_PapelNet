@@ -11,13 +11,13 @@ productsController.getAllProducts = async (req, res) => {
   }
 };
 
+
 productsController.getProductById = async (req, res) => {
   const id=req.params.id
   try {
     const producto = await Products.findById(id);
-    if (!producto) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+    
     res.status(200).json(producto);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -88,7 +88,7 @@ productsController.deleteProduct = async (req, res) => {
     if (!productDeleted) {
       return res.status(404).json({ error: "producto no encontrado" });
     }
-    return res.status(200).json({ productDeleted });
+    res.status(200).json({ message: "producto eliminado" });
   } catch (error) {}
 };
 
