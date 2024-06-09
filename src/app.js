@@ -21,6 +21,8 @@ const userRoutes = require('./routes/user.routes');
 const productRoutes = require('./routes/product.routes');
 const servicesRoutes = require('./routes/service.routes');
 const salesRoutes = require('./routes/sales.routes');
+const expensesRoutes = require('./routes/expenses.routes');
+
 
 
 //RUTAS 
@@ -28,6 +30,7 @@ app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 app.use("/services", servicesRoutes);
 app.use("/sales", salesRoutes);
+app.use("/expenses", expensesRoutes);
 
 
 
