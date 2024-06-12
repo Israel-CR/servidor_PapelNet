@@ -26,7 +26,7 @@ productsController.getProductById = async (req, res) => {
 
 
 productsController.addProducts = async (req, res) => {
-  const { nombre, descripcion,seccion, categoria, precio, cantidad, proveedor } =
+  const { nombre, descripcion,seccion,stock_bajo, categoria, precio, cantidad, proveedor } =
     req.body;
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
@@ -38,6 +38,7 @@ productsController.addProducts = async (req, res) => {
       categoria,
       seccion,
       precio,
+      stock_bajo,
       stock: cantidad,
       proveedor,
       fecha_ingreso: fechaActual,

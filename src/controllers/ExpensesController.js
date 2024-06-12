@@ -58,9 +58,8 @@ expensesController.updateExpense = async (req, res) => {
     try {
       const gasto = await Expenses.findByIdAndDelete(id);
       if (!gasto) {
-        return res.status(404).json({ message: 'Gasto no encontrado' });
+        return res.status(404).json({ error: 'Gasto no encontrado' });
       }
-
       res.status(200).json({ message: 'Gasto eliminado exitosamente' });
     } catch (error) {
       res.status(500).json({ error: error.message });

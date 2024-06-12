@@ -26,6 +26,10 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
+  stock_bajo: {
+    type: Number,
+    required: true,
+  },
   fecha_ingreso: {
     type: String,
     required: true,
