@@ -4,7 +4,7 @@ const productsController = {};
 
 productsController.getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find();
+    const products = await Products.find().populate("imagen");
     res.status(201).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -27,7 +27,6 @@ productsController.getProductById = async (req, res) => {
 
 productsController.addProducts = async (req, res) => {
   const idImage = req.image.id
-  console.log(idImage)
   const { nombre, descripcion,seccion,stock_bajo, categoria, precio, cantidad, proveedor } =
     req.body;
   const fechaActual = new Date().toLocaleString("es-MX", {
