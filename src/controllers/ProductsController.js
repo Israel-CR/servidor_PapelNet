@@ -26,6 +26,8 @@ productsController.getProductById = async (req, res) => {
 
 
 productsController.addProducts = async (req, res) => {
+  const idImage = req.image.id
+  console.log(idImage)
   const { nombre, descripcion,seccion,stock_bajo, categoria, precio, cantidad, proveedor } =
     req.body;
   const fechaActual = new Date().toLocaleString("es-MX", {
@@ -33,6 +35,7 @@ productsController.addProducts = async (req, res) => {
   });
   try {
     const newProduct = new Products({
+      imagen:idImage,
       nombre,
       descripcion,
       categoria,
