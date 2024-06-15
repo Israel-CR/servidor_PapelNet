@@ -5,7 +5,24 @@ const productsController = {};
 productsController.getAllProducts = async (req, res) => {
   try {
     const products = await Products.find().populate("imagen");
-    res.status(201).json(products);
+
+    const productsWithBase64Images = products.map(product => {
+      if (product.imagen) {
+        const imageBase64 = product.imagen.data.toString('base64');
+        return {
+          ...product.toObject(),
+          imagen: {
+            ...product.imagen.toObject(),
+            data: imageBase64,
+          },
+        };
+      }
+      return product;
+    });
+
+    res.status(201).json(productsWithBase64Images);
+    
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
