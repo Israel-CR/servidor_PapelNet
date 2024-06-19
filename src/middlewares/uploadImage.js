@@ -16,7 +16,6 @@ const handleUpload = async (req, res, next) => {
   
   
   uploadMiddleware(req, res, async (err) => {
-    console.log(req.file)
     if (err) {
       return res.status(500).json({ message: 'Failed to upload file', error: err });
     }
