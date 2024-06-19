@@ -4,7 +4,7 @@ const productsController = {};
 
 productsController.getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find().populate("imagen");
+    const products = await Products.find().populate('imagen')
 
     const productsWithBase64Images = products.map(product => {
       if (product.imagen) {
