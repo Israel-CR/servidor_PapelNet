@@ -75,19 +75,28 @@ productsController.addProducts = async (req, res) => {
 };
 productsController.updateProduct = async (req,res) =>{
   const { id } = req.params;  
-  const { nombre, descripcion,seccion, categoria, precio, cantidad, proveedor } =req.body
+ 
+
+  // si no existe el  id de la imagen desde el parametro , poner null
+  const idImage = req.image?.id;
+
+  const { nombre, descripcion,seccion, categoria, precio, cantidad, proveedor, stock_bajo} =req.body;
 
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
   });
   try {
-     const updatedProduct = await Products.findByIdAndUpdate(id, {  nombre,
+
+     const updatedProduct = await Products.findByIdAndUpdate(id, {  
+      nombre,
+      imagen:idImage,
     descripcion,
     categoria,
     seccion,
     precio,
     stock: cantidad,
     proveedor,
+    stock_bajo,
     fecha_ingreso: fechaActual }, { new: true });
     if (!updatedProduct) {
       return res.status(404).json({ message: 'Producto no encontrado' });
