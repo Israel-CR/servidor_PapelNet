@@ -86,7 +86,6 @@ productsController.updateProduct = async (req,res) =>{
     timeZone: "America/Mexico_City",
   });
   try {
-
      const updatedProduct = await Products.findByIdAndUpdate(id, {  
       nombre,
       imagen:idImage,
