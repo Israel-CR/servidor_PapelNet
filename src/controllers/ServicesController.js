@@ -2,6 +2,24 @@ const Services = require("../models/Services");
 
 const servicesController = {};
 
+
+servicesController.sellServices = async (req, res) => {
+  const userId = req.user.id;
+  const {detallesServicio,total_venta} = req.body;
+  try {
+    const newSale = new Services({
+      vendedor:userId,
+      detallesServicio,
+      total_venta
+    });
+    const savedSale = await newSale.save();
+    res.json({ message: "Venta de servicio registrada" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
 servicesController.addServices = async (req, res) => {
   const { nombre, descripcion, precio } = req.body;
   try {

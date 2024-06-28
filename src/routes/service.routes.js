@@ -5,10 +5,12 @@ const {
   getServiceById,
   updateService,
   deleteService,
+  sellServices,
 } = require("../controllers/ServicesController");
+const authRequired = require("../middlewares/validateToken");
 
 const servicesRoutes = Router();
-
+servicesRoutes.route("/sellService").post(authRequired, sellServices);
 servicesRoutes.route("/addService").post(addServices);
 servicesRoutes.route("/").get(getAllServices);
 servicesRoutes.route("/:id").get(getServiceById);

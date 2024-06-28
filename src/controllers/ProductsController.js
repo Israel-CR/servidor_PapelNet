@@ -4,11 +4,11 @@ const productsController = {};
 
 productsController.getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find().populate('imagen')
+    const products = await Products.find().populate("imagen");
 
-    const productsWithBase64Images = products.map(product => {
+    const productsWithBase64Images = products.map((product) => {
       if (product.imagen) {
-        const imageBase64 = product.imagen.data.toString('base64');
+        const imageBase64 = product.imagen.data.toString("base64");
         return {
           ...product.toObject(),
           imagen: {
@@ -21,37 +21,42 @@ productsController.getAllProducts = async (req, res) => {
     });
 
     res.status(201).json(productsWithBase64Images);
-    
-    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-
 productsController.getProductById = async (req, res) => {
-  const id=req.params.id
+  const id = req.params.id;
   try {
     const producto = await Products.findById(id);
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
-    
+    if (!producto)
+      return res.status(404).json({ error: "Producto no encontrado" });
+
     res.status(200).json(producto);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-
 productsController.addProducts = async (req, res) => {
-  const idImage = req.image.id
-  const { nombre, descripcion,seccion,stock_bajo, categoria, precio, cantidad, proveedor } =
-    req.body;
+  const idImage = req.image.id;
+  const {
+    nombre,
+    descripcion,
+    seccion,
+    stock_bajo,
+    categoria,
+    precio,
+    cantidad,
+    proveedor,
+  } = req.body;
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
   });
   try {
     const newProduct = new Products({
-      imagen:idImage,
+      imagen: idImage,
       nombre,
       descripcion,
       categoria,
@@ -73,41 +78,73 @@ productsController.addProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-productsController.updateProduct = async (req,res) =>{
-  const { id } = req.params;  
- 
-
+productsController.updateProduct = async (req, res) => {
+  const { id } = req.params;
   // si no existe el  id de la imagen desde el parametro , poner null
   const idImage = req.image?.id;
+  const {
+    nombre,
+    descripcion,
+    seccion,
+    categoria,
+    precio,
+    cantidad,
+    proveedor,
+    stock_bajo,
+  } = req.body;
 
-  const { nombre, descripcion,seccion, categoria, precio, cantidad, proveedor, stock_bajo} =req.body;
+  console.log(req.body);
 
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
   });
   try {
-     const updatedProduct = await Products.findByIdAndUpdate(id, {  
-      nombre,
-      imagen:idImage,
-    descripcion,
-    categoria,
-    seccion,
-    precio,
-    stock: cantidad,
-    proveedor,
-    stock_bajo,
-    fecha_ingreso: fechaActual }, { new: true });
+    const updatedProduct = await Products.findByIdAndUpdate(
+      id,
+      {
+        nombre,
+        imagen: idImage,
+        descripcion,
+        categoria,
+        seccion,
+        precio,
+        stock: cantidad,
+        proveedor,
+        stock_bajo,
+        fecha_ingreso: fechaActual,
+      },
+      { new: true }
+    );
     if (!updatedProduct) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
+      return res.status(404).json({ message: "Producto no encontrado" });
     }
     res.status(200).json(updatedProduct);
   } catch (error) {
-     res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
+};
 
- 
-
-}
+productsController.reorderQuantityProduct = async (req, res) => {
+  const { id } = req.params;
+  const { cantidad } = req.body;
+  console.log(req.body)
+  console.log(id)
+  try {
+    const updatedProduct = await Products.findByIdAndUpdate(
+      id,
+      {
+        stock: cantidad,
+      },
+      { new: true }
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.status(200).json({message:"producto Actualizado"});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 productsController.deleteProduct = async (req, res) => {
   try {

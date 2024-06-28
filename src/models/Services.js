@@ -1,23 +1,57 @@
-const { model, Schema } = require("mongoose");
+const { default: mongoose, Schema, model } = require("mongoose");
 
-const ServiceSchema = new Schema(
-  {
-    nombre: {
-      type: String,
-      required: true,
+const detallesServicioSchema = new Schema({
+  nombre: {
+    type: String,
+    required: true,
+    enum: ["Copias", "Investigaciones", "Impresiones", "Recargas"],
+  },
+  numero: {
+    type: String,
+    required: function () {
+      return this.nombre === "Recargas";
     },
-    descripcion: {
-      type: String,
-      required: true,
+    minlength: 10,
+  },
+  cantidadRecarga: {
+    type: Number,
+    required: function () {
+      return this.nombre === "Recargas";
     },
-    precio: {
-      type: Number,
-      required: true,
+    enum: [10, 20, 30, 50, 80, 100, 150, 200, 300, 500],
+  },
+  tipo: {
+    type: String,
+    enum:["Color","Blanco y Negro"],
+    required: function () {
+      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
     },
   },
-  {
-    timestamps: true,
-  }
-);
+  precio_unitario: {
+    type: Number,
+    required: function () {
+      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
+    },
+  },
+  cantidad: {
+    type: Number,
+    required: function () {
+      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
+    },
+  },
+  total: {
+    type: Number,
+    required: true,
+  },
+}, { _id: false });
 
-module.exports= model('Services', ServiceSchema)
+const servicioSchema = new Schema({
+  vendedor: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
+  detallesServicio: [detallesServicioSchema],
+  total_venta: { type: Number, required: true },
+  fecha: { type: Date, default: Date.now },
+});
+
+const Servicio = model("Services", servicioSchema);
+
+module.exports = Servicio;
