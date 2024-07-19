@@ -4,7 +4,7 @@ const detallesServicioSchema = new Schema({
   nombre: {
     type: String,
     required: true,
-    enum: ["Copias", "Investigaciones", "Impresiones", "Recargas"],
+    enum: ["Copias", "Investigaciones", "Impresiones", "Recargas", "CURP"],
   },
   numero: {
     type: String,
@@ -24,19 +24,25 @@ const detallesServicioSchema = new Schema({
     type: String,
     enum:["Color","Blanco y Negro"],
     required: function () {
-      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
+      return ["Investigaciones", "Copias", "Impresiones","CURP"].includes(this.nombre);
     },
   },
   precio_unitario: {
     type: Number,
     required: function () {
-      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
+      return ["Investigaciones", "Copias", "Impresiones","CURP"].includes(this.nombre);
+    },
+  },
+  precio_investigacion: {
+    type: Number,
+    required: function () {
+      return ["Investigaciones"].includes(this.nombre);
     },
   },
   cantidad: {
     type: Number,
     required: function () {
-      return ["Investigaciones", "Copias", "Impresiones"].includes(this.nombre);
+      return ["Investigaciones", "Copias", "Impresiones", "CURP"].includes(this.nombre);
     },
   },
   total: {

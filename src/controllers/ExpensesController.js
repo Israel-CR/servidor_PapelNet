@@ -5,7 +5,7 @@ const expensesController={}
 
 expensesController.getAllExpenses=async(req, res)=>{
     try {
-        const gastos = await Expenses.find();
+        const gastos = await Expenses.find().populate("vendedor");
         res.status(201).json(gastos);
       } catch (error) {
         res.status(500).json({ error: error.message });
@@ -25,10 +25,13 @@ expensesController.getExpenseById=async(req, res)=>{
 }
 
 expensesController.addExpenses=async(req, res)=>{
+  const userId = req.user.id;
     const {cantidad, motivo}= req.body
     try {
         const newExpenses = new Expenses({
-         cantidad,motivo
+          vendedor:userId,
+         cantidad,
+         motivo
         });
         
         const newExpense= await newExpenses.save();

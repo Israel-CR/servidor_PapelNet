@@ -34,9 +34,11 @@ servicesController.addServices = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
 servicesController.getAllServices = async (req, res) => {
     try {
-      const servicios = await Services.find();
+      const servicios = await Services.find().populate('vendedor','nombre');
       res.status(200).json(servicios);
     } catch (error) {
       res.status(500).json({ error: error.message });

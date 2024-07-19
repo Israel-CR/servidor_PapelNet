@@ -192,8 +192,8 @@ SalesController.getSalesCompleted = async (req, res) => {
   try {
     const ventasFinalizadas = await Sales.find().populate(
       "productos.producto",
-      "nombre"
-    ).populate("vendedor", "nombre");
+      "nombre descripcion"
+    ).populate("vendedor", "nombre").populate("productos.producto.imagen");
     res.status(201).json(ventasFinalizadas);
   } catch (error) {
     res.status(500).json({ error: error.message });

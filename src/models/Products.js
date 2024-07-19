@@ -36,9 +36,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  proveedor: {
-    type: String,
-  },
+  
 },{
     timestamps:true
     });
