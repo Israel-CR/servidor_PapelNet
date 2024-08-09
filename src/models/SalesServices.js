@@ -9,6 +9,5 @@ const SaleServiceSchema=new Schema({
     timestamps:true
 })
 
-
 module.exports= model("SaleServices",SaleServiceSchema)
 

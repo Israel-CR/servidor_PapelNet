@@ -3,12 +3,15 @@ const Sales = require("../models/Sales");
 
 const SalesController = {};
 
+// Agregar una nueva venta
 SalesController.addSales = async (req, res) => {
   const userId = req.user.id;
-  const { productos, total } = req.body;
+  const { productos,subtotal,descuento, total } = req.body;
   try {
     const venta = new Sales({
       vendedor: userId,
+      subtotal,
+      descuento,
       total,
     });
     for (const item of productos) {
@@ -187,6 +190,9 @@ SalesController.completeSale = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Obtener todas las ventas registradas
 
 SalesController.getSalesCompleted = async (req, res) => {
   try {

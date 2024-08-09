@@ -30,7 +30,7 @@ expensesController.addExpenses=async(req, res)=>{
     try {
         const newExpenses = new Expenses({
           vendedor:userId,
-         cantidad,
+         cantidad,  
          motivo
         });
         

@@ -19,14 +19,11 @@ const SaleSchema = new Schema(
         precio_total: { type: Number, required: true },
       },
     ],
+    subtotal: { type: Number, required: true, default: 0 },
+    descuento: { type: Number, required: true, default: 0, min: 0, max: 100 },
     total: { type: Number, required: true, default: 0 },
+
     fecha: { type: Date, default: Date.now },
-    estado: {
-      type: String,
-      enum: ["EN_PROCESO", "FINALIZADO"],
-      required: true,
-      default: "EN_PROCESO",
-    },
   },
   {
     timestamps: true,
