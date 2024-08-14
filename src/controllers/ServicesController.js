@@ -1,3 +1,4 @@
+const Recargas = require("../models/Recargas");
 const Services = require("../models/Services");
 
 const servicesController = {};
@@ -6,12 +7,36 @@ const servicesController = {};
 servicesController.sellServices = async (req, res) => {
   const userId = req.user.id;
   const {detallesServicio,total_venta} = req.body;
+
   try {
     const newSale = new Services({
       vendedor:userId,
       detallesServicio,
       total_venta
     });
+
+    for(const servicio of detallesServicio){
+      if(servicio?.nombre === "Recargas"){
+        const telcel=await Recargas.findOne({compania:'Telcel'})
+        console.log(telcel)
+        if(!telcel) return res.status(404).json({error:'servicio de recargas no encontrado'})
+
+        const nuevoSaldo= telcel.saldo - servicio?.cantidadRecarga
+        if(nuevoSaldo<=0) return res.status(400).json({message:'Saldo Insuficiente'})
+
+        telcel.saldo = nuevoSaldo
+        if(!telcel.historialRecargas){
+          telcel.historialRecargas=[]
+        }
+        telcel.historialRecargas.push({numero:servicio.numero, monto: servicio.cantidadRecarga})
+       await telcel.save({new:true});
+      }
+
+    }
+
+
+
+
     const savedSale = await newSale.save();
     res.json({ message: "Venta de servicio registrada" });
   } catch (error) {

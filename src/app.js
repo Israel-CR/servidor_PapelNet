@@ -22,6 +22,7 @@ const productRoutes = require('./routes/product.routes');
 const servicesRoutes = require('./routes/service.routes');
 const salesRoutes = require('./routes/sales.routes');
 const expensesRoutes = require('./routes/expenses.routes');
+const cashBoxRoutes = require('./routes/cashBox.routes');
 
 
 
@@ -31,6 +32,7 @@ app.use("/products", productRoutes);
 app.use("/services", servicesRoutes);
 app.use("/sales", salesRoutes);
 app.use("/expenses", expensesRoutes);
+app.use("/caja", cashBoxRoutes)
 
 
 
