@@ -1,17 +1,32 @@
 const { Router } = require("express");
-const { addSales, addProductsForSale, deleteProductsForSale, updateProductsForSale, completeSale, deleteSale, getSalesCompleted, getSalesById } = require("../controllers/SalesController");
+const {
+  addSales,
+  addProductsForSale,
+  deleteProductsForSale,
+  updateProductsForSale,
+  completeSale,
+  deleteSale,
+  getSalesCompleted,
+  getSalesById,
+  getSalesPerMonth,
+} = require("../controllers/SalesController");
 const authRequired = require("../middlewares/validateToken");
 
-const salesRoutes=Router()
+const salesRoutes = Router();
 
-salesRoutes.post('/addSale',authRequired, addSales)
-salesRoutes.get('/',getSalesCompleted)
-salesRoutes.get('/:id',getSalesById)
-salesRoutes.put('/completeSale/:id', completeSale)
-salesRoutes.delete('/deleteSale/:id', deleteSale)
+salesRoutes.post("/addSale", authRequired, addSales);
+salesRoutes.get("/", getSalesCompleted);
+salesRoutes.get("/:id", getSalesById);
+salesRoutes.get("/:year/:month", authRequired, getSalesPerMonth);
 
-salesRoutes.post('/addProduct/:id', addProductsForSale)
-salesRoutes.put('/updateProduct/:id', updateProductsForSale)
-salesRoutes.delete('/deleteProduct/:idventa/:idproducto', deleteProductsForSale)
+salesRoutes.put("/completeSale/:id", completeSale);
+salesRoutes.delete("/deleteSale/:id", deleteSale);
 
-module.exports=salesRoutes
+salesRoutes.post("/addProduct/:id", addProductsForSale);
+salesRoutes.put("/updateProduct/:id", updateProductsForSale);
+salesRoutes.delete(
+  "/deleteProduct/:idventa/:idproducto",
+  deleteProductsForSale
+);
+
+module.exports = salesRoutes;

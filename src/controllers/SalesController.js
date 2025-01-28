@@ -6,7 +6,7 @@ const SalesController = {};
 // Agregar una nueva venta
 SalesController.addSales = async (req, res) => {
   const userId = req.user.id;
-  const { productos,subtotal,descuento, total } = req.body;
+  const { productos, subtotal, descuento, total } = req.body;
   try {
     const venta = new Sales({
       vendedor: userId,
@@ -191,15 +191,14 @@ SalesController.completeSale = async (req, res) => {
   }
 };
 
-
 // Obtener todas las ventas registradas
 
 SalesController.getSalesCompleted = async (req, res) => {
   try {
-    const ventasFinalizadas = await Sales.find().populate(
-      "productos.producto",
-      "nombre descripcion"
-    ).populate("vendedor", "nombre").populate("productos.producto.imagen");
+    const ventasFinalizadas = await Sales.find()
+      .populate("productos.producto", "nombre descripcion")
+      .populate("vendedor", "nombre")
+      .populate("productos.producto.imagen");
     res.status(201).json(ventasFinalizadas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -224,6 +223,26 @@ SalesController.deleteSale = async (async) => {
     if (!venta) return res.status(204).json({ message: "venta inexistente" });
     await Sales.findByIdAndDelete(ventaId);
     res.status(201).json({ message: "venta eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+SalesController.getSalesPerMonth = async (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+
+  try {
+    const ventas = await Sales.find({
+      fecha: {
+        $gte: new Date(`${year}-${month}-01`),
+        $lt: new Date(`${year}-${month}-31`),
+      },
+    })
+
+    if(!ventas.length) return res.status(204).json({message: "No hay ventas en este mes"})
+
+    res.status(201).json(ventas);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

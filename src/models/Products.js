@@ -6,7 +6,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  imagen:{type: mongoose.Schema.Types.ObjectId, ref:"Images"},
+  imagen:String,
   descripcion: {
     type: String,
     required: true,

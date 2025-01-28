@@ -4,23 +4,9 @@ const productsController = {};
 
 productsController.getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find().populate("imagen");
+    const products = await Products.find();
 
-    const productsWithBase64Images = products.map((product) => {
-      if (product.imagen) {
-        const imageBase64 = product.imagen.data.toString("base64");
-        return {
-          ...product.toObject(),
-          imagen: {
-            ...product.imagen.toObject(),
-            data: imageBase64,
-          },
-        };
-      }
-      return product;
-    });
-
-    res.status(201).json(productsWithBase64Images);
+    res.status(201).json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -39,8 +25,9 @@ productsController.getProductById = async (req, res) => {
   }
 };
 
+
 productsController.addProducts = async (req, res) => {
-  const idImage = req.image.id;
+  const imageUrl = req.imageUrl; // Usamos la URL de la imagen subida desde ImgBB
   const {
     nombre,
     descripcion,
@@ -51,12 +38,14 @@ productsController.addProducts = async (req, res) => {
     cantidad,
     proveedor,
   } = req.body;
+
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
   });
+
   try {
     const newProduct = new Products({
-      imagen: idImage,
+      imagen: imageUrl, // Aquí guardamos la URL de la imagen subida
       nombre,
       descripcion,
       categoria,
@@ -78,10 +67,13 @@ productsController.addProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 productsController.updateProduct = async (req, res) => {
   const { id } = req.params;
-  // si no existe el  id de la imagen desde el parametro , poner null
-  const idImage = req.image?.id;
+
+  // Si no existe una imagen subida, usar null
+  const imageUrl = req.image?.url || null; // Usamos la URL de la imagen desde el middleware, si está disponible
+
   const {
     nombre,
     descripcion,
@@ -93,17 +85,19 @@ productsController.updateProduct = async (req, res) => {
     stock_bajo,
   } = req.body;
 
-  console.log(req.body);
+  console.log(req.body); // Para verificar los datos que recibimos
 
   const fechaActual = new Date().toLocaleString("es-MX", {
     timeZone: "America/Mexico_City",
   });
+
   try {
+    // Actualizar el producto con los nuevos datos, incluyendo la URL de la imagen
     const updatedProduct = await Products.findByIdAndUpdate(
       id,
       {
         nombre,
-        imagen: idImage,
+        imagen: imageUrl, // Usar la URL de la imagen en lugar del ID
         descripcion,
         categoria,
         seccion,
@@ -115,11 +109,16 @@ productsController.updateProduct = async (req, res) => {
       },
       { new: true }
     );
+
+    // Verificar si el producto fue encontrado y actualizado
     if (!updatedProduct) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
+
+    // Responder con el producto actualizado
     res.status(200).json(updatedProduct);
   } catch (error) {
+    // Manejo de errores
     res.status(500).json({ error: error.message });
   }
 };
@@ -127,8 +126,8 @@ productsController.updateProduct = async (req, res) => {
 productsController.reorderQuantityProduct = async (req, res) => {
   const { id } = req.params;
   const { cantidad } = req.body;
-  console.log(req.body)
-  console.log(id)
+  console.log(req.body);
+  console.log(id);
   try {
     const updatedProduct = await Products.findByIdAndUpdate(
       id,
@@ -140,7 +139,7 @@ productsController.reorderQuantityProduct = async (req, res) => {
     if (!updatedProduct) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
-    res.status(200).json({message:"producto Actualizado"});
+    res.status(200).json({ message: "producto Actualizado" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
