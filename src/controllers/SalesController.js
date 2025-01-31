@@ -238,11 +238,41 @@ SalesController.getSalesPerMonth = async (req, res) => {
         $gte: new Date(`${year}-${month}-01`),
         $lt: new Date(`${year}-${month}-31`),
       },
-    })
+    });
 
-    if(!ventas.length) return res.status(204).json({message: "No hay ventas en este mes"})
+    if (!ventas.length)
+      return res.status(204).json({ message: "No hay ventas en este mes" });
 
-    res.status(201).json(ventas);
+    // agrupar ventas por dia y generar, el dia(fecha), total de ventas y subtotal descuentos, productos vendidospor dia, tomando en cuenta que en un dia se registran mas de una venta y devolver un array con las ventas de todos los dias en general total, total subtototal, total descuentos, total productos.
+    const ventasMesPorDia = ventas.reduce((acc, venta) => {
+      //la variable fecha debe devolver este formato [mes-dia-año]
+      const date = venta.fecha.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+
+      const fecha = date.split("/").join("-");
+
+      const index = acc.findIndex((item) => item.fecha === fecha);
+      if (index === -1) {
+        acc.push({
+          fecha,
+          total: venta.total,
+          subtotal: venta.subtotal,
+          descuento: venta.descuento,
+          productos: venta.productos.length,
+        });
+      } else {
+        acc[index].total += venta.total;
+        acc[index].subtotal += venta.subtotal;
+        acc[index].descuento += venta.descuento;
+        acc[index].productos += venta.productos.length;
+      }
+      return acc;
+    }, []);
+
+    res.status(201).json(ventasMesPorDia);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

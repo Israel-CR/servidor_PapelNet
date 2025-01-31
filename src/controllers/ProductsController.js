@@ -37,6 +37,7 @@ productsController.addProducts = async (req, res) => {
     precio,
     cantidad,
     proveedor,
+    fecha_caducidad
   } = req.body;
 
   const fechaActual = new Date().toLocaleString("es-MX", {
@@ -55,6 +56,7 @@ productsController.addProducts = async (req, res) => {
       stock: cantidad,
       proveedor,
       fecha_ingreso: fechaActual,
+      fecha_caducidad
     });
 
     const productSaved = await newProduct.save();

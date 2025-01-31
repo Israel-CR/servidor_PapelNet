@@ -19,3 +19,4 @@ userRoutes.post("/login", login);
 userRoutes.put("/updateUser/:id", updateUser);
 userRoutes.delete("/deleteUser/:id", deleteUser);
 module.exports = userRoutes;
+

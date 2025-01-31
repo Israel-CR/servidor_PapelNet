@@ -17,7 +17,7 @@ const productSchema = new Schema({
   },
   seccion: {
     type: String,
-    enum: ["papeleria", "regalos"],
+    enum: ["papeleria", "regalos","tienda"],
     required: true,
   },
   precio: {
@@ -35,6 +35,12 @@ const productSchema = new Schema({
   fecha_ingreso: {
     type: String,
     required: true,
+  },
+  fecha_caducidad: {
+    type: String,
+    required: function () {
+      return ["tienda"].includes(this.seccion);
+    },
   },
   
 },{

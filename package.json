@@ -22,7 +22,8 @@
     "mongodb": "^6.6.2",
     "mongoose": "^8.4.0",
     "multer": "^1.4.5-lts.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "punycode": "^2.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
