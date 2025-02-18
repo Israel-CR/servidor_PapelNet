@@ -9,6 +9,7 @@ class ImgBBService {
   async uploadImage(file) {
     const form = new FormData();
     form.append('image', file.buffer, file.originalname);
+    
 
     const response = await fetch(`https://api.imgbb.com/1/upload?key=${this.apiKey}`, {
       method: 'POST',

@@ -1,15 +1,14 @@
 const multer = require("multer");
-const ImgBBService = require("../services/ImgBBService"); // Importar el servicio
+const firebaseStorageService = require("../firebase-admin"); // Importar el servicio de Firebase
 const dotenv = require("dotenv");
-dotenv.config(); // Cargar las variables de entorno desde el archivo .env
+dotenv.config(); 
 
-// Configurar almacenamiento de Multer (en memoria)
 const storage = multer.memoryStorage();
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } }); // Limite de 10MB
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } }); // Límite de 10MB
 
 const uploadMiddleware = upload.single("imagen");
 
-// Middleware para subir imagen a ImgBB
+
 const handleUpload = async (req, res, next) => {
   uploadMiddleware(req, res, async (err) => {
     if (err) {
@@ -27,11 +26,10 @@ const handleUpload = async (req, res, next) => {
       next();
       return;
     }
-    const imgBBService = new ImgBBService(process.env.IMGBB_API_KEY);
 
     try {
-      const imageUrl = await imgBBService.uploadImage(req.file);
-      console.log("Imagen subida a ImgBB:", imageUrl);
+      const imageUrl = await firebaseStorageService.uploadImage(req.file);
+      console.log("Imagen subida a Firebase Storage:", imageUrl);
 
       req.imageUrl = imageUrl;
 
@@ -39,7 +37,7 @@ const handleUpload = async (req, res, next) => {
     } catch (error) {
       console.error("Error al subir la imagen:", error);
       res.status(500).json({
-        message: "Error al subir la imagen a ImgBB",
+        message: "Error al subir la imagen a Firebase Storage",
         error: error.message,
       });
     }
@@ -47,6 +45,8 @@ const handleUpload = async (req, res, next) => {
 };
 
 module.exports = handleUpload;
+
+
 
 // // uploadMiddleware.js
 // const multer = require('multer');
