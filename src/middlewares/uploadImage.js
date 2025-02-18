@@ -14,11 +14,9 @@ const handleUpload = async (req, res, next) => {
   uploadMiddleware(req, res, async (err) => {
     if (err) {
       if (err.code === "LIMIT_FILE_SIZE") {
-        return res
-          .status(400)
-          .json({
-            message: "El archivo es demasiado grande. El límite es de 10 MB.",
-          });
+        return res.status(400).json({
+          message: "El archivo es demasiado grande. El límite es de 10 MB.",
+        });
       }
       return res
         .status(500)
@@ -29,27 +27,21 @@ const handleUpload = async (req, res, next) => {
       next();
       return;
     }
+    const imgBBService = new ImgBBService(process.env.IMGBB_API_KEY);
 
     try {
-      // Instanciamos ImgBBService con la clave API
-      const imgBBService = new ImgBBService(process.env.IMGBB_API_KEY);
-
-      // Subir la imagen a ImgBB y obtener la URL
       const imageUrl = await imgBBService.uploadImage(req.file);
+      console.log("Imagen subida a ImgBB:", imageUrl);
 
-      // Guardamos la URL de la imagen subida en `req`
       req.imageUrl = imageUrl;
 
-      // Pasamos al siguiente middleware o controlador
       next();
     } catch (error) {
       console.error("Error al subir la imagen:", error);
-      res
-        .status(500)
-        .json({
-          message: "Error al subir la imagen a ImgBB",
-          error: error.message,
-        });
+      res.status(500).json({
+        message: "Error al subir la imagen a ImgBB",
+        error: error.message,
+      });
     }
   });
 };
