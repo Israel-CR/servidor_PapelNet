@@ -1,5 +1,5 @@
 const multer = require("multer");
-const firebaseStorageService = require("../firebase-admin"); // Importar el servicio de Firebase
+const firebaseStorageService = require("../services/firebase-admin"); // Importar el servicio de Firebase
 const dotenv = require("dotenv");
 dotenv.config(); 
 

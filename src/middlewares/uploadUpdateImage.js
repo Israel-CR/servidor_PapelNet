@@ -1,5 +1,5 @@
 const multer = require('multer');
-const firebaseStorageService = require('../firebase-admin'); // Importar el servicio de Firebase
+const firebaseStorageService = require('../services/firebase-admin'); // Importar el servicio de Firebase
 const { default: mongoose } = require('mongoose');
 
 // Configuración de Multer para almacenar archivos en memoria
